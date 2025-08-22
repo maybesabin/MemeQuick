@@ -44,12 +44,12 @@ const GenerateMeme = () => {
             ctx.font = `${Math.floor(canvas.width / 10)}px Impact`;
 
             // Top text
-            ctx.fillText(text.topText.toUpperCase(), canvas.width / 2, 80);
-            ctx.strokeText(text.topText.toUpperCase(), canvas.width / 2, 80);
+            ctx.fillText(text.topText.toUpperCase(), canvas.width / 2, 70);
+            ctx.strokeText(text.topText.toUpperCase(), canvas.width / 2, 70);
 
             // Bottom text
-            ctx.fillText(text.bottomText.toUpperCase(), canvas.width / 2, canvas.height - 30);
-            ctx.strokeText(text.bottomText.toUpperCase(), canvas.width / 2, canvas.height - 30);
+            ctx.fillText(text.bottomText.toUpperCase(), canvas.width / 2, canvas.height - 20);
+            ctx.strokeText(text.bottomText.toUpperCase(), canvas.width / 2, canvas.height - 20);
         };
     }, [image, text]);
 
