@@ -17,6 +17,7 @@ const GenerateMeme = () => {
 
     useEffect(() => {
         setFadeIn(true);
+        window.scrollTo(0, 0)
     }, []);
 
     useEffect(() => {
@@ -79,7 +80,7 @@ const GenerateMeme = () => {
     };
 
     return (
-        <div className="flex flex-col items-center gap-4 justify-center h-screen w-full bg-gradient-to-b from-black via-neutral-800 to-purple-900 text-white">
+        <div className="flex flex-col items-center gap-4 md:justify-center justify-start md:h-svh min-h-svh md:py-0 py-12 w-full bg-gradient-to-b from-black via-neutral-800 to-purple-900 text-white">
             <h1 className={`text-2xl font-medium transition-all duration-600 ease-in-out ${fadeIn ? 'translate-y-0 opacity-100 blur-none' : 'translate-y-10 opacity-0 blur-xl'}`}>
                 Make Memes. Quickly.
             </h1>
