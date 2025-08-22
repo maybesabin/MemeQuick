@@ -80,10 +80,10 @@ const GenerateMeme = () => {
 
     return (
         <div className="flex flex-col items-center gap-4 justify-center h-screen w-full bg-gradient-to-b from-black via-neutral-800 to-purple-900 text-white">
-            <h1 className={`text-2xl font-medium transition-all duration-600 ease-in-out ${fadeIn ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+            <h1 className={`text-2xl font-medium transition-all duration-600 ease-in-out ${fadeIn ? 'translate-y-0 opacity-100 blur-none' : 'translate-y-10 opacity-0 blur-xl'}`}>
                 Make Memes. Quickly.
             </h1>
-            <div className={`2xl:w-1/2 xl:w-[75%] w-[95%] text-neutral-300 flex lg:flex-row flex-col lg:items-start items-center gap-8 bg-neutral-900/80 rounded-2xl px-4 py-6 duration-600 delay-500 ease-in-out ${fadeIn ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+            <div className={`2xl:w-1/2 xl:w-[75%] w-[95%] text-neutral-300 flex lg:flex-row flex-col lg:items-start items-center gap-8 bg-neutral-900/80 rounded-2xl px-4 py-6 duration-600 delay-500 ease-in-out ${fadeIn ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0 blur-xl'}`}>
                 <div className="lg:w-2/5 w-full flex flex-col items-start gap-3">
                     <>
                         <Label htmlFor="imageUpload" className="md:text-sm text-xs">
