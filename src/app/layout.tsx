@@ -41,7 +41,7 @@ export const metadata = {
     siteName: "MemeQuick",
     images: [
       {
-        url: emoji,
+        url: emoji.src,
         width: 1200,
         height: 630,
         alt: "MemeQuick",
