@@ -138,6 +138,7 @@ const UploadMeme = ({
                 Add Your Text
             </Label>
             <Input
+                disabled={!image}
                 value={text.topText}
                 onChange={(e) => setText({ ...text, topText: e.target.value })}
                 placeholder="Enter Top Text..."
@@ -146,6 +147,7 @@ const UploadMeme = ({
                 type="text"
             />
             <Input
+                disabled={!image}
                 value={text.bottomText}
                 onChange={(e) => setText({ ...text, bottomText: e.target.value })}
                 placeholder="Enter Bottom Text..."
