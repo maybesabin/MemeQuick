@@ -4,10 +4,10 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useEffect, useRef, useState } from "react"
+import { toPng } from 'html-to-image'
 
 const GenerateMeme = () => {
-
-    const canvasRef = useRef<HTMLCanvasElement>(null);
+    const memeRef = useRef<HTMLDivElement>(null);
     const [image, setImage] = useState<string | null>(null)
     const [text, setText] = useState({
         topText: "",
@@ -20,40 +20,6 @@ const GenerateMeme = () => {
         window.scrollTo(0, 0)
     }, []);
 
-    useEffect(() => {
-        if (!canvasRef.current || !image) return;
-
-        const canvas = canvasRef.current;
-        const ctx = canvas.getContext("2d");
-        if (!ctx) return;
-
-        const img = new Image();
-        img.src = image;
-        img.onload = () => {
-            // Resize canvas to image size
-            canvas.width = img.width;
-            canvas.height = img.height;
-
-            // Draw image
-            ctx.drawImage(img, 0, 0);
-
-            // Text styles
-            ctx.fillStyle = "white";
-            ctx.strokeStyle = "black";
-            ctx.lineWidth = 3;
-            ctx.textAlign = "center";
-            ctx.font = `${Math.floor(canvas.width / 10)}px Impact`;
-
-            // Top text
-            ctx.fillText(text.topText.toUpperCase(), canvas.width / 2, 70);
-            ctx.strokeText(text.topText.toUpperCase(), canvas.width / 2, 70);
-
-            // Bottom text
-            ctx.fillText(text.bottomText.toUpperCase(), canvas.width / 2, canvas.height - 20);
-            ctx.strokeText(text.bottomText.toUpperCase(), canvas.width / 2, canvas.height - 20);
-        };
-    }, [image, text]);
-
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
@@ -63,20 +29,27 @@ const GenerateMeme = () => {
         }
     };
 
-    const downloadMeme = () => {
-        if (!canvasRef.current) return;
+    const downloadMeme = async () => {
+        if (!memeRef.current || !image) return;
 
-        const formatText = (str: string) => str.trim().replace(/\s+/g, '-');
+        try {
+            const formatText = (str: string) => str.trim().replace(/\s+/g, '-');
+            const top = text.topText ? formatText(text.topText) : 'top';
+            const bottom = text.bottomText ? formatText(text.bottomText) : 'bottom';
+            const fileName = `${top}-${bottom}.png`;
 
-        const top = text.topText ? formatText(text.topText) : 'top';
-        const bottom = text.bottomText ? formatText(text.bottomText) : 'bottom';
+            const dataUrl = await toPng(memeRef.current, {
+                quality: 1.0,
+                backgroundColor: 'transparent'
+            });
 
-        const fileName = `${top}-${bottom}.png`;
-
-        const link = document.createElement("a");
-        link.download = fileName;
-        link.href = canvasRef.current.toDataURL("image/png");
-        link.click();
+            const link = document.createElement("a");
+            link.download = fileName;
+            link.href = dataUrl;
+            link.click();
+        } catch (error) {
+            console.error('Error generating meme:', error);
+        }
     };
 
     return (
@@ -132,13 +105,57 @@ const GenerateMeme = () => {
 
                 <div className="lg:w-3/5 w-full">
                     <h2 className="md:text-sm text-xs">Your Meme Preview</h2>
-                    <div className={`w-full border border-neutral-700 lg:h-96 md:h-[26rem] h-80 rounded-xl mt-2`}>
-                        {image &&
-                            <canvas
-                                ref={canvasRef}
-                                className="w-full h-full rounded-xl"
-                            />
-                        }
+                    <div className={`w-full border border-neutral-700 lg:h-96 md:h-[26rem] h-80 rounded-xl mt-2 overflow-hidden`}>
+                        {image && (
+                            <div
+                                ref={memeRef}
+                                className="relative w-full h-full"
+                                style={{
+                                    backgroundImage: `url(${image})`,
+                                    backgroundSize: 'cover',
+                                    backgroundPosition: 'center',
+                                    backgroundRepeat: 'no-repeat'
+                                }}
+                            >
+                                {/* Top Text */}
+                                {text.topText && (
+                                    <div
+                                        className="absolute top-0 left-1/2 transform -translate-x-1/2 text-center"
+                                        style={{
+                                            color: 'white',
+                                            WebkitTextStroke: "0.5px black",
+                                            fontSize: 'clamp(16px, 4vw, 52px)',
+                                            fontWeight: 'bold',
+                                            fontFamily: 'Impact, Arial Black, sans-serif',
+                                            textTransform: 'uppercase',
+                                            maxWidth: '90%',
+                                            wordWrap: 'break-word'
+                                        }}
+                                    >
+                                        {text.topText}
+                                    </div>
+                                )}
+
+                                {/* Bottom Text */}
+                                {text.bottomText && (
+                                    <div
+                                        className="absolute bottom-0 left-1/2 transform -translate-x-1/2 text-center"
+                                        style={{
+                                            color: 'white',
+                                            WebkitTextStroke: "0.5px black",
+                                            fontSize: 'clamp(16px, 4vw, 52px)',
+                                            fontWeight: 'bold',
+                                            fontFamily: 'Impact, Arial Black, sans-serif',
+                                            textTransform: 'uppercase',
+                                            maxWidth: '90%',
+                                            wordWrap: 'break-word'
+                                        }}
+                                    >
+                                        {text.bottomText}
+                                    </div>
+                                )}
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
