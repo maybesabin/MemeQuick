@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { Ref } from 'react';
 
 interface MemePreviewPropsType {
     image: string | null;
-    memeRef: any;
+    memeRef: Ref<HTMLDivElement> | null;
     text: {
         topText: string;
         bottomText: string;

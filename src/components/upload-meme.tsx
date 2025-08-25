@@ -1,5 +1,5 @@
 import { Input } from "./ui/input"
-import { SetStateAction } from "react";
+import { Ref, SetStateAction } from "react";
 import { toPng } from 'html-to-image'
 import { Button } from "./ui/button";
 import { Slider } from "./ui/slider";
@@ -21,7 +21,7 @@ interface UploadMemePropsType {
         stroke: number;
         fontSize: string;
     }>>;
-    memeRef: any;
+    memeRef: Ref<HTMLDivElement> | null;
 }
 
 const UploadMeme = ({
@@ -41,7 +41,7 @@ const UploadMeme = ({
     };
 
     const downloadMeme = async () => {
-        if (!memeRef.current || !image) return;
+        if (!memeRef || !('current' in memeRef) || !memeRef.current || !image) return;
 
         try {
             const formatText = (str: string) => str.trim().replace(/\s+/g, '-');
