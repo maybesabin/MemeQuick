@@ -1,15 +1,11 @@
-import React, { Ref } from 'react';
+import React, { Ref, useState } from 'react';
+import { motion } from 'framer-motion';
+import type { MemeTextState } from '../lib/text';
 
 interface MemePreviewPropsType {
     image: string | null;
     memeRef: Ref<HTMLDivElement> | null;
-    text: {
-        topText: string;
-        bottomText: string;
-        stroke: number;
-        topTextFontSize: string;
-        bottomTextFontSize: string;
-    };
+    text: MemeTextState;
 }
 
 const MemePreview = ({
@@ -17,6 +13,10 @@ const MemePreview = ({
     memeRef,
     text,
 }: MemePreviewPropsType) => {
+    const [isDragging, setIsDragging] = useState(false);
+    const guideXPercent = 50;
+    const guideYPercent = 50;
+
     return (
         <div className="lg:w-3/5 w-full">
             <h2 className="md:text-sm text-xs">Your Meme Preview</h2>
@@ -32,10 +32,27 @@ const MemePreview = ({
                             backgroundRepeat: 'no-repeat'
                         }}
                     >
+                        {isDragging && (
+                            <>
+                                <div
+                                    className="absolute top-0 bottom-0 w-px bg-yellow-400 pointer-events-none"
+                                    style={{ left: `${guideXPercent}%` }}
+                                />
+                                <div
+                                    className="absolute left-0 right-0 h-px bg-yellow-400 pointer-events-none"
+                                    style={{ top: `${guideYPercent}%` }}
+                                />
+                            </>
+                        )}
                         {/* Top Text */}
                         {text.topText && (
-                            <div
-                                className="absolute top-4 left-1/2 transform -translate-x-1/2 text-center"
+                            <motion.div
+                                className="absolute transform -translate-x-1/2 -translate-y-1/2 text-center cursor-move"
+                                drag
+                                dragMomentum={false}
+                                onDragStart={() => setIsDragging(true)}
+                                onDrag={() => { }}
+                                onDragEnd={() => setIsDragging(false)}
                                 style={{
                                     color: 'white',
                                     WebkitTextStroke: `${text.stroke}px black`,
@@ -44,17 +61,24 @@ const MemePreview = ({
                                     fontFamily: 'Impact, Arial Black, sans-serif',
                                     textTransform: 'uppercase',
                                     maxWidth: '90%',
-                                    wordWrap: 'break-word'
+                                    wordWrap: 'break-word',
+                                    left: `${text.topPosXPercent}%`,
+                                    top: `${text.topPosYPercent}%`
                                 }}
                             >
                                 {text.topText}
-                            </div>
+                            </motion.div>
                         )}
 
                         {/* Bottom Text */}
                         {text.bottomText && (
-                            <div
-                                className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-center"
+                            <motion.div
+                                className="absolute transform -translate-x-1/2 -translate-y-1/2 text-center cursor-move"
+                                drag
+                                dragMomentum={false}
+                                onDragStart={() => setIsDragging(true)}
+                                onDrag={() => { }}
+                                onDragEnd={() => setIsDragging(false)}
                                 style={{
                                     color: 'white',
                                     WebkitTextStroke: `${text.stroke}px black`,
@@ -63,11 +87,13 @@ const MemePreview = ({
                                     fontFamily: 'Impact, Arial Black, sans-serif',
                                     textTransform: 'uppercase',
                                     maxWidth: '90%',
-                                    wordWrap: 'break-word'
+                                    wordWrap: 'break-word',
+                                    left: `${text.bottomPosXPercent}%`,
+                                    top: `${text.bottomPosYPercent}%`
                                 }}
                             >
                                 {text.bottomText}
-                            </div>
+                            </motion.div>
                         )}
                     </div>
                 )}

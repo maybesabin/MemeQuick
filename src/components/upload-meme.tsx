@@ -5,24 +5,13 @@ import { Button } from "./ui/button";
 import { Slider } from "./ui/slider";
 import { Label } from "./ui/label";
 import { motion, AnimatePresence } from "framer-motion";
+import type { MemeTextState } from "../lib/text";
 
 interface UploadMemePropsType {
     image: string | null;
     setImage: React.Dispatch<SetStateAction<string | null>>;
-    text: {
-        topText: string;
-        bottomText: string;
-        stroke: number;
-        topTextFontSize: string;
-        bottomTextFontSize: string;
-    };
-    setText: React.Dispatch<SetStateAction<{
-        topText: string;
-        bottomText: string;
-        stroke: number;
-        topTextFontSize: string;
-        bottomTextFontSize: string;
-    }>>;
+    text: MemeTextState;
+    setText: React.Dispatch<SetStateAction<MemeTextState>>;
     memeRef: Ref<HTMLDivElement> | null;
 }
 
@@ -71,6 +60,21 @@ const UploadMeme = ({
             setText({ ...text, topTextFontSize: `${size}px` });
         } else {
             setText({ ...text, bottomTextFontSize: `${size}px` });
+        }
+    };
+
+    const handleTextPositionChange = (
+        value: number[],
+        which: "top" | "bottom",
+        axis: "x" | "y"
+    ) => {
+        const percent = Math.max(0, Math.min(100, Math.round(value[0])));
+        if (which === "top") {
+            if (axis === "x") setText({ ...text, topPosXPercent: percent });
+            else setText({ ...text, topPosYPercent: percent });
+        } else {
+            if (axis === "x") setText({ ...text, bottomPosXPercent: percent });
+            else setText({ ...text, bottomPosYPercent: percent });
         }
     };
 
@@ -133,6 +137,7 @@ const UploadMeme = ({
                             />
                             <span className="md:text-sm text-xs">{text.topTextFontSize.split("px")}</span>
                         </div>
+
                     </motion.div>
                 }
                 {text.bottomText &&
@@ -157,6 +162,7 @@ const UploadMeme = ({
                             />
                             <span className="md:text-sm text-xs">{text.bottomTextFontSize.split("px")}</span>
                         </div>
+
                     </motion.div>
                 }
             </AnimatePresence>
