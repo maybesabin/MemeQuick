@@ -35,14 +35,39 @@ const UploadMeme = ({
         if (!memeRef || !('current' in memeRef) || !memeRef.current || !image) return;
 
         try {
+            const container = memeRef.current as HTMLElement;
+
+            // Wait for images inside the container to be fully loaded (mobile fix)
+            const imgs = Array.from(container.querySelectorAll('img')) as HTMLImageElement[];
+            await Promise.all(
+                imgs.map(img =>
+                    img.complete && img.naturalWidth > 0
+                        ? Promise.resolve()
+                        : new Promise<void>(resolve => {
+                            const onLoad = () => { img.removeEventListener('load', onLoad); resolve(); };
+                            img.addEventListener('load', onLoad, { once: true });
+                        })
+                )
+            );
+
+            // Ensure web fonts are ready
+            if (document && 'fonts' in document) {
+                try { await (document as any).fonts.ready; } catch { /* noop */ }
+            }
+
+            // Two rAFs to ensure layout/paint settled on mobile Safari
+            await new Promise(requestAnimationFrame);
+            await new Promise(requestAnimationFrame);
+
             const formatText = (str: string) => str.trim().replace(/\s+/g, '-');
             const top = text.topText ? formatText(text.topText) : 'top';
             const bottom = text.bottomText ? formatText(text.bottomText) : 'bottom';
             const fileName = `${top}-${bottom}.png`;
 
-            const dataUrl = await toPng(memeRef.current, {
+            const dataUrl = await toPng(container, {
                 quality: 1.0,
-                backgroundColor: 'transparent'
+                backgroundColor: 'transparent',
+                cacheBust: true,
             });
 
             const link = document.createElement("a");

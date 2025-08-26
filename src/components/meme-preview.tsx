@@ -25,13 +25,13 @@ const MemePreview = ({
                     <div
                         ref={memeRef}
                         className="relative w-full h-full"
-                        style={{
-                            backgroundImage: `url(${image})`,
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center',
-                            backgroundRepeat: 'no-repeat'
-                        }}
                     >
+                        <img
+                            src={image}
+                            alt=""
+                            aria-hidden
+                            className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none"
+                        />
                         {isDragging && (
                             <>
                                 <div
