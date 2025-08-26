@@ -52,10 +52,10 @@ const UploadMeme = ({
 
             // Ensure web fonts are ready
             if (document && 'fonts' in document) {
-                try { await (document as any).fonts.ready; } catch { /* noop */ }
+                try { await (document).fonts.ready; } catch { }
             }
 
-            // Two rAFs to ensure layout/paint settled on mobile Safari
+            // to ensure layout/paint settled on mobile Safari
             await new Promise(requestAnimationFrame);
             await new Promise(requestAnimationFrame);
 
@@ -88,20 +88,7 @@ const UploadMeme = ({
         }
     };
 
-    const handleTextPositionChange = (
-        value: number[],
-        which: "top" | "bottom",
-        axis: "x" | "y"
-    ) => {
-        const percent = Math.max(0, Math.min(100, Math.round(value[0])));
-        if (which === "top") {
-            if (axis === "x") setText({ ...text, topPosXPercent: percent });
-            else setText({ ...text, topPosYPercent: percent });
-        } else {
-            if (axis === "x") setText({ ...text, bottomPosXPercent: percent });
-            else setText({ ...text, bottomPosYPercent: percent });
-        }
-    };
+    const hasText = text.topText || text.bottomText;
 
     return (
         <div className="lg:w-2/5 w-full flex flex-col items-start gap-2">
@@ -116,7 +103,7 @@ const UploadMeme = ({
             />
 
             <AnimatePresence>
-                {(text.topText || text.bottomText) && (
+                {hasText && (
                     <motion.div
                         key={"text-stroke"}
                         initial={{ opacity: 0, height: 0, y: -10 }}
@@ -187,7 +174,20 @@ const UploadMeme = ({
                             />
                             <span className="md:text-sm text-xs">{text.bottomTextFontSize.split("px")}</span>
                         </div>
-
+                    </motion.div>
+                }
+                {hasText &&
+                    <motion.div
+                        className="mt-3 w-full"
+                    >
+                        <Label htmlFor="color">
+                            Text Color
+                        </Label>
+                        <Input
+                            type="color"
+                            onChange={(e) => setText({ ...text, color: e.target.value })}
+                            value={text.color}
+                        />
                     </motion.div>
                 }
             </AnimatePresence>
@@ -221,7 +221,7 @@ const UploadMeme = ({
             >
                 Download Meme
             </Button>
-        </div>
+        </div >
     )
 }
 

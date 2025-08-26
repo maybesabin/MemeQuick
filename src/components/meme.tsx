@@ -10,6 +10,7 @@ const Meme = () => {
     const memeRef = useRef<HTMLDivElement>(null);
     const [image, setImage] = useState<string | null>(null)
     const [text, setText] = useState<MemeTextState>({
+        color: "#FFF",
         topText: "",
         bottomText: "",
         stroke: 0.5,

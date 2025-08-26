@@ -1,4 +1,5 @@
 export type MemeTextState = {
+    color: string;
     topText: string;
     bottomText: string;
     stroke: number;

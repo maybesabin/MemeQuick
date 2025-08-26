@@ -54,7 +54,7 @@ const MemePreview = ({
                                 onDrag={() => { }}
                                 onDragEnd={() => setIsDragging(false)}
                                 style={{
-                                    color: 'white',
+                                    color: text.color,
                                     WebkitTextStroke: `${text.stroke}px black`,
                                     fontSize: text.topTextFontSize,
                                     fontWeight: 'bold',
@@ -80,7 +80,7 @@ const MemePreview = ({
                                 onDrag={() => { }}
                                 onDragEnd={() => setIsDragging(false)}
                                 style={{
-                                    color: 'white',
+                                    color: text.color,
                                     WebkitTextStroke: `${text.stroke}px black`,
                                     fontSize: text.bottomTextFontSize,
                                     fontWeight: 'bold',
