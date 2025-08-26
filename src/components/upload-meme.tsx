@@ -13,13 +13,15 @@ interface UploadMemePropsType {
         topText: string;
         bottomText: string;
         stroke: number;
-        fontSize: string;
+        topTextFontSize: string;
+        bottomTextFontSize: string;
     };
     setText: React.Dispatch<SetStateAction<{
         topText: string;
         bottomText: string;
         stroke: number;
-        fontSize: string;
+        topTextFontSize: string;
+        bottomTextFontSize: string;
     }>>;
     memeRef: Ref<HTMLDivElement> | null;
 }
@@ -63,15 +65,17 @@ const UploadMeme = ({
         }
     };
 
-    const handleFontSizeChange = (value: number[]) => {
+    const handleTextSizeChange = (value: number[], type: "top" | "bottom") => {
         const size = value[0];
-        setText({ ...text, fontSize: `${size}px` });
+        if (type === "top") {
+            setText({ ...text, topTextFontSize: `${size}px` });
+        } else {
+            setText({ ...text, bottomTextFontSize: `${size}px` });
+        }
     };
 
-    const hasText = text.topText || text.bottomText;
-
     return (
-        <div className="lg:w-2/5 w-full flex flex-col items-start gap-3">
+        <div className="lg:w-2/5 w-full flex flex-col items-start gap-2">
             <Label htmlFor="imageUpload" className="md:text-sm text-xs">
                 Upload Image
             </Label>
@@ -83,15 +87,16 @@ const UploadMeme = ({
             />
 
             <AnimatePresence>
-                {hasText && (
+                {(text.topText || text.bottomText) && (
                     <motion.div
+                        key={"text-stroke"}
                         initial={{ opacity: 0, height: 0, y: -10 }}
                         animate={{ opacity: 1, height: "auto", y: 0 }}
                         exit={{ opacity: 0, height: 0, y: -10 }}
                         transition={{ duration: 0.3, ease: "easeOut" }}
                         className="w-full"
                     >
-                        <Label htmlFor="strokeWidth" className="mt-5">
+                        <Label htmlFor="strokeWidth" className="mt-3">
                             Stroke Width
                         </Label>
                         <div className="relative w-full flex items-center justify-between gap-3">
@@ -102,15 +107,37 @@ const UploadMeme = ({
                                 value={[text.stroke]}
                                 onValueChange={(value) => setText({ ...text, stroke: value[0] })}
                             />
-                            <p className="md:text-sm text-xs">{text.stroke}</p>
+                            <span className="md:text-sm text-xs">{text.stroke}</span>
                         </div>
                     </motion.div>
                 )}
-            </AnimatePresence>
-
-            <AnimatePresence>
-                {hasText && (
+                {text.topText &&
                     <motion.div
+                        key={"text-top"}
+                        initial={{ opacity: 0, height: 0, y: -10 }}
+                        animate={{ opacity: 1, height: "auto", y: 0 }}
+                        exit={{ opacity: 0, height: 0, y: -10 }}
+                        transition={{ duration: 0.3, delay: 0.1, ease: "easeOut" }}
+                        className="w-full"
+                    >
+                        <Label htmlFor="fontSize" className="mt-3">
+                            Top Font Size
+                        </Label>
+                        <div className="relative w-full flex items-center justify-between gap-3">
+                            <Slider
+                                min={16}
+                                max={72}
+                                step={1}
+                                value={[parseInt(text.topTextFontSize.replace('px', '')) || 32]}
+                                onValueChange={(val) => handleTextSizeChange(val, "top")}
+                            />
+                            <span className="md:text-sm text-xs">{text.topTextFontSize.split("px")}</span>
+                        </div>
+                    </motion.div>
+                }
+                {text.bottomText &&
+                    <motion.div
+                        key={"text-bottom"}
                         initial={{ opacity: 0, height: 0, y: -10 }}
                         animate={{ opacity: 1, height: "auto", y: 0 }}
                         exit={{ opacity: 0, height: 0, y: -10 }}
@@ -118,23 +145,23 @@ const UploadMeme = ({
                         className="w-full"
                     >
                         <Label htmlFor="fontSize" className="mt-5">
-                            Font Size
+                            Bottom Font Size
                         </Label>
                         <div className="relative w-full flex items-center justify-between gap-3">
                             <Slider
                                 min={16}
                                 max={72}
                                 step={1}
-                                value={[parseInt(text.fontSize.replace('px', '')) || 32]}
-                                onValueChange={handleFontSizeChange}
+                                value={[parseInt(text.bottomTextFontSize.replace('px', '')) || 32]}
+                                onValueChange={(val) => handleTextSizeChange(val, "bottom")}
                             />
-                            <p className="md:text-sm text-xs">{text.fontSize}</p>
+                            <span className="md:text-sm text-xs">{text.bottomTextFontSize.split("px")}</span>
                         </div>
                     </motion.div>
-                )}
+                }
             </AnimatePresence>
 
-            <Label htmlFor="topText" className="mt-5">
+            <Label htmlFor="topText" className="mt-3">
                 Add Your Text
             </Label>
             <Input
@@ -158,7 +185,7 @@ const UploadMeme = ({
             <Button
                 disabled={!image}
                 onClick={downloadMeme}
-                className="mt-5 md:text-xs w-full"
+                className="mt-3 md:text-xs w-full"
                 variant={"secondary"}
             >
                 Download Meme

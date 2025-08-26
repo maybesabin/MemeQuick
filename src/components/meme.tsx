@@ -12,7 +12,8 @@ const Meme = () => {
         topText: "",
         bottomText: "",
         stroke: 0.5,
-        fontSize: "32px"
+        topTextFontSize: "32px",
+        bottomTextFontSize: "32px"
     })
 
     return (

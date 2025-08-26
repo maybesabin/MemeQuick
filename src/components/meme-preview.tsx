@@ -7,27 +7,27 @@ interface MemePreviewPropsType {
         topText: string;
         bottomText: string;
         stroke: number;
-        fontSize: string;
+        topTextFontSize: string;
+        bottomTextFontSize: string;
     };
 }
 
 const MemePreview = ({
     image,
     memeRef,
-    text
-
+    text,
 }: MemePreviewPropsType) => {
     return (
         <div className="lg:w-3/5 w-full">
             <h2 className="md:text-sm text-xs">Your Meme Preview</h2>
-            <div className={`w-full border border-neutral-700 lg:h-96 md:h-[26rem] h-80 rounded-xl mt-2 overflow-hidden`}>
+            <div className={`w-full border border-neutral-700 lg:h-[30rem] md:h-[26rem] h-80 rounded-xl mt-2 overflow-hidden`}>
                 {image && (
                     <div
                         ref={memeRef}
                         className="relative w-full h-full"
                         style={{
                             backgroundImage: `url(${image})`,
-                            backgroundSize: 'contain',
+                            backgroundSize: 'cover',
                             backgroundPosition: 'center',
                             backgroundRepeat: 'no-repeat'
                         }}
@@ -39,7 +39,7 @@ const MemePreview = ({
                                 style={{
                                     color: 'white',
                                     WebkitTextStroke: `${text.stroke}px black`,
-                                    fontSize: text.fontSize,
+                                    fontSize: text.topTextFontSize,
                                     fontWeight: 'bold',
                                     fontFamily: 'Impact, Arial Black, sans-serif',
                                     textTransform: 'uppercase',
@@ -58,7 +58,7 @@ const MemePreview = ({
                                 style={{
                                     color: 'white',
                                     WebkitTextStroke: `${text.stroke}px black`,
-                                    fontSize: text.fontSize,
+                                    fontSize: text.bottomTextFontSize,
                                     fontWeight: 'bold',
                                     fontFamily: 'Impact, Arial Black, sans-serif',
                                     textTransform: 'uppercase',
