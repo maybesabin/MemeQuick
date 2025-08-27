@@ -4,14 +4,19 @@ import { toPng } from 'html-to-image'
 import { Button } from "./ui/button";
 import { Slider } from "./ui/slider";
 import { Label } from "./ui/label";
-import { motion, AnimatePresence } from "framer-motion";
-import type { MemeTextState } from "../lib/text";
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover"
+import { Edit } from "lucide-react";
+import { text } from "@/types/text";
 
 interface UploadMemePropsType {
     image: string | null;
     setImage: React.Dispatch<SetStateAction<string | null>>;
-    text: MemeTextState;
-    setText: React.Dispatch<SetStateAction<MemeTextState>>;
+    text: text;
+    setText: React.Dispatch<SetStateAction<text>>;
     memeRef: Ref<HTMLDivElement> | null;
 }
 
@@ -102,45 +107,55 @@ const UploadMeme = ({
                 type="file"
             />
 
-            <AnimatePresence>
-                {hasText && (
-                    <motion.div
-                        key={"text-stroke"}
-                        initial={{ opacity: 0, height: 0, y: -10 }}
-                        animate={{ opacity: 1, height: "auto", y: 0 }}
-                        exit={{ opacity: 0, height: 0, y: -10 }}
-                        transition={{ duration: 0.3, ease: "easeOut" }}
-                        className="w-full"
-                    >
-                        <Label htmlFor="strokeWidth" className="mt-3">
+            <Label htmlFor="topText" className="mt-3">
+                Add Your Text
+            </Label>
+
+            {/* Top Text */}
+            <div className="flex items-center gap-2 w-full">
+                <Input
+                    disabled={!image}
+                    value={text.topText}
+                    onChange={(e) => setText({ ...text, topText: e.target.value })}
+                    placeholder="Enter Top Text..."
+                    name="topText"
+                    className="file:text-white placeholder:text-neutral-500 md:text-sm text-xs"
+                    type="text"
+                />
+                <Popover>
+                    <PopoverTrigger asChild>
+                        <Button
+                            disabled={!hasText}
+                            variant={"secondary"}
+                            size={"icon"}
+                            className="dark cursor-pointer"
+                        >
+                            <Edit />
+                        </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="dark">
+                        <Label htmlFor="top-text-stroke-width" className="mt-5">
                             Stroke Width
                         </Label>
                         <div className="relative w-full flex items-center justify-between gap-3">
                             <Slider
+                                name="top-text-stroke-width"
+                                className="mt-2"
                                 min={0}
                                 max={5}
                                 step={0.25}
-                                value={[text.stroke]}
-                                onValueChange={(value) => setText({ ...text, stroke: value[0] })}
+                                value={[text.topStrokeWidth]}
+                                onValueChange={(value) => setText({ ...text, topStrokeWidth: value[0] })}
                             />
-                            <span className="md:text-sm text-xs">{text.stroke}</span>
+                            <span className="md:text-sm text-xs">{text.topStrokeWidth}</span>
                         </div>
-                    </motion.div>
-                )}
-                {text.topText &&
-                    <motion.div
-                        key={"text-top"}
-                        initial={{ opacity: 0, height: 0, y: -10 }}
-                        animate={{ opacity: 1, height: "auto", y: 0 }}
-                        exit={{ opacity: 0, height: 0, y: -10 }}
-                        transition={{ duration: 0.3, delay: 0.1, ease: "easeOut" }}
-                        className="w-full"
-                    >
-                        <Label htmlFor="fontSize" className="mt-3">
-                            Top Font Size
+                        <Label htmlFor="top-text-size" className="mt-5">
+                            Font Size
                         </Label>
                         <div className="relative w-full flex items-center justify-between gap-3">
                             <Slider
+                                name="top-text-size"
+                                className="mt-2"
                                 min={16}
                                 max={72}
                                 step={1}
@@ -149,23 +164,103 @@ const UploadMeme = ({
                             />
                             <span className="md:text-sm text-xs">{text.topTextFontSize.split("px")}</span>
                         </div>
-
-                    </motion.div>
-                }
-                {text.bottomText &&
-                    <motion.div
-                        key={"text-bottom"}
-                        initial={{ opacity: 0, height: 0, y: -10 }}
-                        animate={{ opacity: 1, height: "auto", y: 0 }}
-                        exit={{ opacity: 0, height: 0, y: -10 }}
-                        transition={{ duration: 0.3, delay: 0.1, ease: "easeOut" }}
-                        className="w-full"
-                    >
-                        <Label htmlFor="fontSize" className="mt-5">
-                            Bottom Font Size
+                        <Label htmlFor="top-text-opacity" className="mt-5">
+                            Opacity
                         </Label>
                         <div className="relative w-full flex items-center justify-between gap-3">
                             <Slider
+                                name="top-text-opacity"
+                                className="mt-2"
+                                min={0}
+                                max={100}
+                                step={1}
+                                value={[text.topTextOpacity]}
+                                onValueChange={(val) => setText({ ...text, topTextOpacity: val[0] })}
+                            />
+                            <span className="md:text-sm text-xs">{text.topTextOpacity}%</span>
+                        </div>
+                        <Label htmlFor="top-text-letter-spacing" className="mt-5">
+                            Letter Spacing
+                        </Label>
+                        <div className="relative w-full flex items-center justify-between gap-3">
+                            <Slider
+                                name="top-text-letter-spacing"
+                                className="mt-2"
+                                min={0}
+                                max={15}
+                                step={1}
+                                value={[text.topLetterSpacing]}
+                                onValueChange={(val) => setText({ ...text, topLetterSpacing: val[0] })}
+                            />
+                            <span className="md:text-sm text-xs">{text.topLetterSpacing}</span>
+                        </div>
+                        <Label htmlFor="top-text-color" className="mt-5">
+                            Text Color
+                        </Label>
+                        <div className="w-full flex items-center gap-2 mt-2">
+                            <input
+                                className="w-1/6 h-9"
+                                name="top-text-color"
+                                type="color"
+                                onChange={(e) => setText({ ...text, topTextColor: e.target.value })}
+                                value={text.topTextColor}
+                            />
+                            <Input
+                                className="w-5/6 h-8"
+                                type="text"
+                                onChange={(e) => setText({ ...text, topTextColor: e.target.value })}
+                                value={text.topTextColor}
+                            />
+                        </div>
+                    </PopoverContent>
+                </Popover>
+            </div>
+
+            {/* Bottom Text */}
+            <div className="flex items-center gap-2 w-full">
+                <Input
+                    disabled={!image}
+                    value={text.bottomText}
+                    onChange={(e) => setText({ ...text, bottomText: e.target.value })}
+                    placeholder="Enter Bottom Text..."
+                    name="bottomText"
+                    className="file:text-white placeholder:text-neutral-500 md:text-sm text-xs"
+                    type="text"
+                />
+                <Popover>
+                    <PopoverTrigger asChild>
+                        <Button
+                            disabled={!hasText}
+                            variant={"secondary"}
+                            size={"icon"}
+                            className="dark cursor-pointer"
+                        >
+                            <Edit />
+                        </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="dark">
+                        <Label htmlFor="bottom-text-stroke-width" className="mt-5">
+                            Stroke Width
+                        </Label>
+                        <div className="relative w-full flex items-center justify-between gap-3">
+                            <Slider
+                                name="bottom-text-stroke-width"
+                                className="mt-2"
+                                min={0}
+                                max={5}
+                                step={0.25}
+                                value={[text.bottomStrokeWidth]}
+                                onValueChange={(value) => setText({ ...text, bottomStrokeWidth: value[0] })}
+                            />
+                            <span className="md:text-sm text-xs">{text.bottomStrokeWidth}</span>
+                        </div>
+                        <Label htmlFor="bottom-text-size" className="mt-5">
+                            Font Size
+                        </Label>
+                        <div className="relative w-full flex items-center justify-between gap-3">
+                            <Slider
+                                name="bottom-text-size"
+                                className="mt-2"
                                 min={16}
                                 max={72}
                                 step={1}
@@ -174,45 +269,57 @@ const UploadMeme = ({
                             />
                             <span className="md:text-sm text-xs">{text.bottomTextFontSize.split("px")}</span>
                         </div>
-                    </motion.div>
-                }
-                {hasText &&
-                    <motion.div
-                        className="mt-3 w-full"
-                    >
-                        <Label htmlFor="color">
+                        <Label htmlFor="bottom-text-opacity" className="mt-5">
+                            Opacity
+                        </Label>
+                        <div className="relative w-full flex items-center justify-between gap-3">
+                            <Slider
+                                name="bottom-text-opacity"
+                                className="mt-2"
+                                min={0}
+                                max={100}
+                                step={1}
+                                value={[text.bottomTextOpacity]}
+                                onValueChange={(val) => setText({ ...text, bottomTextOpacity: val[0] })}
+                            />
+                            <span className="md:text-sm text-xs">{text.bottomTextOpacity}%</span>
+                        </div>
+                        <Label htmlFor="bottom-text-letter-spacing" className="mt-5">
+                            Letter Spacing
+                        </Label>
+                        <div className="relative w-full flex items-center justify-between gap-3">
+                            <Slider
+                                name="bottom-text-letter-spacing"
+                                className="mt-2"
+                                min={0}
+                                max={15}
+                                step={1}
+                                value={[text.bottomLetterSpacing]}
+                                onValueChange={(val) => setText({ ...text, bottomLetterSpacing: val[0] })}
+                            />
+                            <span className="md:text-sm text-xs">{text.bottomLetterSpacing}</span>
+                        </div>
+                        <Label htmlFor="bottom-text-color" className="mt-5">
                             Text Color
                         </Label>
-                        <Input
-                            type="color"
-                            onChange={(e) => setText({ ...text, color: e.target.value })}
-                            value={text.color}
-                        />
-                    </motion.div>
-                }
-            </AnimatePresence>
-
-            <Label htmlFor="topText" className="mt-3">
-                Add Your Text
-            </Label>
-            <Input
-                disabled={!image}
-                value={text.topText}
-                onChange={(e) => setText({ ...text, topText: e.target.value })}
-                placeholder="Enter Top Text..."
-                name="topText"
-                className="file:text-white placeholder:text-neutral-500 md:text-sm text-xs"
-                type="text"
-            />
-            <Input
-                disabled={!image}
-                value={text.bottomText}
-                onChange={(e) => setText({ ...text, bottomText: e.target.value })}
-                placeholder="Enter Bottom Text..."
-                name="bottomText"
-                className="file:text-white placeholder:text-neutral-500 md:text-sm text-xs"
-                type="text"
-            />
+                        <div className="w-full flex items-center gap-2 mt-2">
+                            <input
+                                className="w-1/6 h-9"
+                                name="bottom-text-color"
+                                type="color"
+                                onChange={(e) => setText({ ...text, bottomTextColor: e.target.value })}
+                                value={text.bottomTextColor}
+                            />
+                            <Input
+                                className="w-5/6 h-8"
+                                type="text"
+                                onChange={(e) => setText({ ...text, bottomTextColor: e.target.value })}
+                                value={text.bottomTextColor}
+                            />
+                        </div>
+                    </PopoverContent>
+                </Popover>
+            </div>
             <Button
                 disabled={!image}
                 onClick={downloadMeme}

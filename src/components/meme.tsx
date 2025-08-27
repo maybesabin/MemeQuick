@@ -4,22 +4,28 @@ import { useRef, useState } from "react"
 import { motion } from "framer-motion"
 import MemePreview from "./meme-preview"
 import UploadMeme from "./upload-meme"
-import type { MemeTextState } from "../lib/text"
+import { text } from "@/types/text"
 
 const Meme = () => {
     const memeRef = useRef<HTMLDivElement>(null);
     const [image, setImage] = useState<string | null>(null)
-    const [text, setText] = useState<MemeTextState>({
-        color: "#FFF",
+    const [text, setText] = useState<text>({
+        topTextColor: "#FFF",
+        bottomTextColor: "#FFF",
         topText: "",
         bottomText: "",
-        stroke: 0.5,
+        topStrokeWidth: 0.5,
+        bottomStrokeWidth: 0.5,
         topTextFontSize: "32px",
         bottomTextFontSize: "32px",
         topPosXPercent: 50,
         topPosYPercent: 6,
         bottomPosXPercent: 50,
-        bottomPosYPercent: 94
+        bottomPosYPercent: 94,
+        topTextOpacity: 100,
+        bottomTextOpacity: 100,
+        topLetterSpacing: 0,
+        bottomLetterSpacing: 0
     })
 
     return (

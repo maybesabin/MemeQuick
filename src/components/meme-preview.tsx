@@ -1,11 +1,11 @@
 import React, { Ref, useState } from 'react';
 import { motion } from 'framer-motion';
-import type { MemeTextState } from '../lib/text';
+import { text } from '@/types/text';
 
 interface MemePreviewPropsType {
     image: string | null;
     memeRef: Ref<HTMLDivElement> | null;
-    text: MemeTextState;
+    text: text;
 }
 
 const MemePreview = ({
@@ -44,6 +44,7 @@ const MemePreview = ({
                                 />
                             </>
                         )}
+
                         {/* Top Text */}
                         {text.topText && (
                             <motion.div
@@ -54,14 +55,16 @@ const MemePreview = ({
                                 onDrag={() => { }}
                                 onDragEnd={() => setIsDragging(false)}
                                 style={{
-                                    color: text.color,
-                                    WebkitTextStroke: `${text.stroke}px black`,
+                                    letterSpacing: `${text.topLetterSpacing}px`,
+                                    opacity: `${text.topTextOpacity}%`,
+                                    color: text.topTextColor,
+                                    WebkitTextStroke: `${text.topStrokeWidth}px black`,
                                     fontSize: text.topTextFontSize,
                                     fontWeight: 'bold',
                                     fontFamily: 'Impact, Arial Black, sans-serif',
-                                    textTransform: 'uppercase',
-                                    maxWidth: '90%',
-                                    wordWrap: 'break-word',
+                                    wordBreak: "keep-all",
+                                    overflowWrap: "normal",
+                                    width: "90%",
                                     left: `${text.topPosXPercent}%`,
                                     top: `${text.topPosYPercent}%`
                                 }}
@@ -80,14 +83,16 @@ const MemePreview = ({
                                 onDrag={() => { }}
                                 onDragEnd={() => setIsDragging(false)}
                                 style={{
-                                    color: text.color,
-                                    WebkitTextStroke: `${text.stroke}px black`,
+                                    letterSpacing: `${text.bottomLetterSpacing}px`,
+                                    opacity: `${text.bottomTextOpacity}%`,
+                                    color: text.bottomTextColor,
+                                    WebkitTextStroke: `${text.bottomStrokeWidth}px black`,
                                     fontSize: text.bottomTextFontSize,
                                     fontWeight: 'bold',
                                     fontFamily: 'Impact, Arial Black, sans-serif',
-                                    textTransform: 'uppercase',
-                                    maxWidth: '90%',
-                                    wordWrap: 'break-word',
+                                    wordBreak: "keep-all",
+                                    overflowWrap: "normal",
+                                    width: "90%",
                                     left: `${text.bottomPosXPercent}%`,
                                     top: `${text.bottomPosYPercent}%`
                                 }}
