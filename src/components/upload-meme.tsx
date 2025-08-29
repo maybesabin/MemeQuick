@@ -212,6 +212,24 @@ const UploadMeme = ({
                                 value={text.topTextColor}
                             />
                         </div>
+                        <Label htmlFor="top-stroke-color" className="mt-5">
+                            Stroke Color
+                        </Label>
+                        <div className="w-full flex items-center gap-2 mt-2">
+                            <input
+                                className="w-1/6 h-9"
+                                name="top-stroke-color"
+                                type="color"
+                                onChange={(e) => setText({ ...text, topStrokeColor: e.target.value })}
+                                value={text.topStrokeColor}
+                            />
+                            <Input
+                                className="w-5/6 h-8"
+                                type="text"
+                                onChange={(e) => setText({ ...text, topStrokeColor: e.target.value })}
+                                value={text.topStrokeColor}
+                            />
+                        </div>
                     </PopoverContent>
                 </Popover>
             </div>
@@ -315,6 +333,24 @@ const UploadMeme = ({
                                 type="text"
                                 onChange={(e) => setText({ ...text, bottomTextColor: e.target.value })}
                                 value={text.bottomTextColor}
+                            />
+                        </div>
+                        <Label htmlFor="bottom-stroke-color" className="mt-5">
+                            Stroke Color
+                        </Label>
+                        <div className="w-full flex items-center gap-2 mt-2">
+                            <input
+                                className="w-1/6 h-9"
+                                name="bottom-stroke-color"
+                                type="color"
+                                onChange={(e) => setText({ ...text, bottomStrokeColor: e.target.value })}
+                                value={text.bottomStrokeColor}
+                            />
+                            <Input
+                                className="w-5/6 h-8"
+                                type="text"
+                                onChange={(e) => setText({ ...text, bottomStrokeColor: e.target.value })}
+                                value={text.bottomStrokeColor}
                             />
                         </div>
                     </PopoverContent>

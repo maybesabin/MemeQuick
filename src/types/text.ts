@@ -2,6 +2,7 @@ export type text = {
     // Top text
     topText: string;
     topTextColor: string;
+    topStrokeColor: string;
     topStrokeWidth: number;
     topTextFontSize: string;
     topPosXPercent: number;
@@ -12,6 +13,7 @@ export type text = {
     // Bottom Text
     bottomText: string;
     bottomTextColor: string;
+    bottomStrokeColor: string;
     bottomStrokeWidth: number;
     bottomTextFontSize: string;
     bottomPosXPercent: number;
@@ -24,6 +26,7 @@ export type setText = {
     // Top text
     topText: string;
     topTextColor: string;
+    topStrokeColor: string;
     topStrokeWidth: number;
     topTextFontSize: string;
     topPosXPercent: number;
@@ -32,6 +35,7 @@ export type setText = {
     // Bottom Text
     bottomText: string;
     bottomTextColor: string;
+    bottomStrokeColor: string;
     bottomStrokeWidth: number;
     bottomTextFontSize: string;
     bottomPosXPercent: number;

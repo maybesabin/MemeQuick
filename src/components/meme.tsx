@@ -10,21 +10,26 @@ const Meme = () => {
     const memeRef = useRef<HTMLDivElement>(null);
     const [image, setImage] = useState<string | null>(null)
     const [text, setText] = useState<text>({
-        topTextColor: "#FFF",
-        bottomTextColor: "#FFF",
+        // Top Text Properties
         topText: "",
-        bottomText: "",
+        topTextColor: "#ffffff",
+        topStrokeColor: "#000000",
         topStrokeWidth: 0.5,
-        bottomStrokeWidth: 0.5,
         topTextFontSize: "32px",
-        bottomTextFontSize: "32px",
         topPosXPercent: 50,
         topPosYPercent: 6,
+        topTextOpacity: 100,
+        topLetterSpacing: 0,
+
+        // Bottom Text Properties
+        bottomText: "",
+        bottomTextColor: "#ffffff",
+        bottomStrokeColor: "#000000",
+        bottomStrokeWidth: 0.5,
+        bottomTextFontSize: "32px",
         bottomPosXPercent: 50,
         bottomPosYPercent: 94,
-        topTextOpacity: 100,
         bottomTextOpacity: 100,
-        topLetterSpacing: 0,
         bottomLetterSpacing: 0
     })
 
