@@ -27,6 +27,7 @@ const UploadMeme = ({
     setText,
     memeRef
 }: UploadMemePropsType) => {
+
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
@@ -55,12 +56,17 @@ const UploadMeme = ({
                 )
             );
 
+            container.style.transform = 'translateZ(0)';
+            await new Promise(resolve => setTimeout(resolve, 100));
+
             // Ensure web fonts are ready
             if (document && 'fonts' in document) {
                 try { await (document).fonts.ready; } catch { }
             }
 
             // to ensure layout/paint settled on mobile Safari
+            await new Promise(requestAnimationFrame);
+            await new Promise(requestAnimationFrame);
             await new Promise(requestAnimationFrame);
             await new Promise(requestAnimationFrame);
 
@@ -73,6 +79,13 @@ const UploadMeme = ({
                 quality: 1.0,
                 backgroundColor: 'transparent',
                 cacheBust: true,
+                pixelRatio: window.devicePixelRatio || 1,
+                width: container.offsetWidth,
+                height: container.offsetHeight,
+                style: {
+                    transform: 'scale(1)',
+                    transformOrigin: 'top left',
+                }
             });
 
             const link = document.createElement("a");
