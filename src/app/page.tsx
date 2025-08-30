@@ -1,15 +1,14 @@
-"use client"
-
-import dynamic from "next/dynamic"
-
-const MemeComponent = dynamic(() => import("../components/meme"), {
-  ssr: false
-})
+import HeroHeader from '@/components/hero-header'
+import MemeContainer from '@/components/meme-container'
+import React from 'react'
 
 const page = () => {
   return (
-    <div className="flex flex-col items-center gap-4 md:justify-center justify-start md:h-svh min-h-svh md:py-0 py-12 w-full bg-gradient-to-b from-black via-neutral-800 to-purple-900 text-white">
-      <MemeComponent />
+    <div className='flex items-start justify-center h-full'>
+      <div className='xl:w-[80rem] w-full'>
+        <HeroHeader />
+        <MemeContainer />
+      </div>
     </div>
   )
 }

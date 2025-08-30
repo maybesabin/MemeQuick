@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import emoji from "../assets/goofy.png"
+import Providers from "@/components/providers";
+import Navbar from "@/components/navbar";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -62,7 +64,12 @@ export default function RootLayout({
       <body
         className={`${poppins.variable} antialiased`}
       >
-        {children}
+        <div className="w-full min-h-svh bg-gradient-to-b from-black via-neutral-800 to-purple-900 text-white py-6 xl:px-0 px-6">
+          <Navbar />
+          <Providers>
+            {children}
+          </Providers>
+        </div>
       </body>
     </html>
   );

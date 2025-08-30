@@ -41,3 +41,8 @@ export type setText = {
     bottomPosXPercent: number;
     bottomPosYPercent: number;
 }
+
+export type Meme = {
+    imageUrl: string;
+    name: string;
+}

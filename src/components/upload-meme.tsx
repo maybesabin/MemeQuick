@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/popover"
 import { Edit } from "lucide-react";
 import { text } from "@/types/text";
+import { useMemeContext } from "@/app/contexts/meme-context";
 
 interface UploadMemePropsType {
     image: string | null;
@@ -27,6 +28,7 @@ const UploadMeme = ({
     setText,
     memeRef
 }: UploadMemePropsType) => {
+    const { selectedMeme } = useMemeContext()
 
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -43,7 +45,7 @@ const UploadMeme = ({
         try {
             const container = memeRef.current as HTMLElement;
 
-            // Wait for images inside the container to be fully loaded (mobile fix)
+            // wait for images to be fully loaded
             const imgs = Array.from(container.querySelectorAll('img')) as HTMLImageElement[];
             await Promise.all(
                 imgs.map(img =>
@@ -64,7 +66,6 @@ const UploadMeme = ({
                 try { await (document).fonts.ready; } catch { }
             }
 
-            // to ensure layout/paint settled on mobile Safari
             await new Promise(requestAnimationFrame);
             await new Promise(requestAnimationFrame);
             await new Promise(requestAnimationFrame);
@@ -114,6 +115,7 @@ const UploadMeme = ({
                 Upload Image
             </Label>
             <Input
+                disabled={selectedMeme ? true : false}
                 onChange={handleImageUpload}
                 name="imageUpload"
                 className="file:text-white md:text-sm text-xs"
