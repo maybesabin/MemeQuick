@@ -83,7 +83,7 @@ const MemeContainer = () => {
                 className="text-gray-300 md:w-auto w-1/2"
             >
                 <span>Search results for: </span>
-                <span className="font-medium text-purple-300 break-words">"{searchQuery}"</span>
+                <span className="font-medium text-purple-300 break-words">&quot;{searchQuery}&quot;</span>
             </motion.div>
             <Button
                 onClick={handleClearSearch}
