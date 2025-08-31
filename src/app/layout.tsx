@@ -4,6 +4,7 @@ import "./globals.css";
 import emoji from "../assets/goofy.png"
 import Providers from "@/components/providers";
 import Navbar from "@/components/navbar";
+import Script from "next/script";
 
 const poppins = Poppins({
   variable: "--font-poppins",
