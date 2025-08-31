@@ -14,7 +14,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "MemeQuick - Make Memes in Seconds | Meme Generator",
+  title: "MemeQuick",
   description:
     "Create hilarious memes in seconds with MemeQuick! Upload images, add top & bottom text, stickers, and share your memes instantly.",
   keywords: [
