@@ -55,7 +55,7 @@ const Meme = ({ selectedMeme }: MemeProps) => {
                 initial={{ y: 20, opacity: 0, filter: "blur(10px)" }}
                 animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
                 transition={{ duration: 0.6, ease: "easeOut" }}
-                className="text-2xl font-medium"
+                className="md:text-2xl text-base font-medium"
             >
                 {selectedMeme ? `${selectedMeme.name}` : "Make Memes. Quickly."}
             </motion.h1>

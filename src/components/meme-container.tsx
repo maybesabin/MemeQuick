@@ -1,27 +1,17 @@
 "use client"
 
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios"
 import Image from "next/image";
 import { motion } from "framer-motion"
 import { useMemeContext } from "@/app/contexts/meme-context";
 import { useRouter } from "next/navigation";
 import { flushSync } from "react-dom";
 import { Meme } from "@/types/text";
+import { Button } from "./ui/button";
+import { X } from "lucide-react";
 
 const MemeContainer = () => {
-    const { setSelectedMeme } = useMemeContext();
+    const { setSelectedMeme, filteredMemes, isLoading, searchQuery, setSearchQuery } = useMemeContext();
     const router = useRouter();
-
-    const fetchMemes = async () => {
-        const res = await axios.get(`/api/memes`)
-        return res.data;
-    }
-
-    const { data, isLoading } = useQuery({
-        queryKey: ['memes'],
-        queryFn: fetchMemes
-    })
 
     const handleMemeClick = (meme: Meme) => {
         flushSync(() => {
@@ -31,6 +21,10 @@ const MemeContainer = () => {
             });
         });
         router.push('/create/custom');
+    };
+
+    const handleClearSearch = () => {
+        setSearchQuery("");
     };
 
     // Loading skeleton component
@@ -64,22 +58,69 @@ const MemeContainer = () => {
         </div>
     )
 
+    // No results message
+    const NoResults = () => (
+        <div className="col-span-full flex flex-col items-center justify-center py-12 text-center">
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                className="text-gray-400"
+            >
+                <p className="md:text-lg text-sm font-medium mb-1">No memes found</p>
+                <p className="md:text-sm text-xs">Try adjusting your search terms</p>
+            </motion.div>
+        </div>
+    );
+
+    // Search active header
+    const SearchHeader = () => (
+        <div className="col-span-full w-full flex items-center justify-between mb-4 md:text-sm text-xs">
+            <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.3 }}
+                className="text-gray-300 md:w-auto w-1/2"
+            >
+                <span>Search results for: </span>
+                <span className="font-medium text-purple-300 break-words">"{searchQuery}"</span>
+            </motion.div>
+            <Button
+                onClick={handleClearSearch}
+                variant="secondary"
+                size="sm"
+                className="md:text-sm text-xs dark text-gray-400 hover:text-gray-200 hover:bg-gray-700/50"
+            >
+                <X className="w-4 h-4" />
+                Clear Search
+            </Button>
+        </div>
+    );
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, ease: "easeOut", delay: 1.5 }}
-            className="md:mt-12 mt-6 grid lg:grid-cols-5 md:grid-cols-3 grid-cols-2 gap-6 w-full"
+            className="md:mt-12 mt-6 w-full"
         >
-            {isLoading ? (
-                Array.from({ length: 10 }).map((_, idx) => (
-                    <LoadingSkeleton key={`skeleton-${idx}`} />
-                ))
-            ) : (
-                data?.memes?.map((item: Meme, idx: number) => (
-                    <MemeItem key={`meme-${idx}`} item={item} />
-                ))
-            )}
+            {/* Search Header */}
+            {searchQuery && <SearchHeader />}
+
+            {/* Memes Grid */}
+            <div className="grid lg:grid-cols-5 md:grid-cols-3 grid-cols-2 gap-6 w-full">
+                {isLoading ? (
+                    Array.from({ length: 10 }).map((_, idx) => (
+                        <LoadingSkeleton key={`skeleton-${idx}`} />
+                    ))
+                ) : searchQuery && filteredMemes?.length === 0 ? (
+                    <NoResults />
+                ) : (
+                    filteredMemes?.map((item: Meme, idx: number) => (
+                        <MemeItem key={`meme-${idx}`} item={item} />
+                    ))
+                )}
+            </div>
         </motion.div>
     )
 }
