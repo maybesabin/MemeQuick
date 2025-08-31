@@ -7,7 +7,7 @@ import { Meme } from "@/types/text";
 
 interface MemeData {
     name: string;
-    imageUrl: string;
+    url: string;
 }
 
 interface MemeContext {
@@ -28,7 +28,8 @@ export const MemeProvider = ({ children }: { children: React.ReactNode }) => {
     const [searchQuery, setSearchQuery] = useState<string>("");
 
     const fetchMemes = async () => {
-        const res = await axios.get(`/api/memes`)
+        const res = await axios.get(`https://api.imgflip.com/get_memes`)
+        console.log(res.data)
         return res.data;
     }
 
@@ -37,7 +38,7 @@ export const MemeProvider = ({ children }: { children: React.ReactNode }) => {
         queryFn: fetchMemes
     })
 
-    const memes = data?.memes;
+    const memes = data?.data?.memes;
 
     // Filter memes based on search query
     const filteredMemes = useMemo(() => {

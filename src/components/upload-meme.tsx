@@ -72,9 +72,18 @@ const UploadMeme = ({
             await new Promise(requestAnimationFrame);
 
             const formatText = (str: string) => str.trim().replace(/\s+/g, '-');
-            const top = text.topText ? formatText(text.topText) : 'top';
-            const bottom = text.bottomText ? formatText(text.bottomText) : 'bottom';
-            const fileName = `${top}-${bottom}.png`;
+
+            // Determine filename based on text content
+            let fileName: string;
+            if (text.topText && text.bottomText) {
+                fileName = `${formatText(text.topText)}-${formatText(text.bottomText)}.png`;
+            } else if (text.topText) {
+                fileName = `${formatText(text.topText)}.png`;
+            } else if (text.bottomText) {
+                fileName = `${formatText(text.bottomText)}.png`;
+            } else {
+                fileName = selectedMeme ? `${selectedMeme.name.replace(/\s+/g, '-')}.png` : 'meme.png';
+            }
 
             const dataUrl = await toPng(container, {
                 quality: 1.0,

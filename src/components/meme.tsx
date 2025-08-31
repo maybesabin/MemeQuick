@@ -8,7 +8,7 @@ import { text } from "@/types/text"
 
 interface MemeData {
     name: string;
-    imageUrl: string;
+    url: string;
 }
 
 interface MemeProps {
@@ -44,10 +44,12 @@ const Meme = ({ selectedMeme }: MemeProps) => {
 
     // Set the image when selectedMeme changes
     useEffect(() => {
-        if (selectedMeme?.imageUrl) {
-            setImage(selectedMeme.imageUrl);
+        if (selectedMeme?.url) {
+            setImage(selectedMeme.url);
         }
-    }, [selectedMeme?.imageUrl]);
+    }, [selectedMeme?.url]);
+
+
 
     return (
         <>

@@ -30,7 +30,7 @@ const MemePreview = ({
                             src={image}
                             alt=""
                             aria-hidden
-                            className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none"
+                            className="absolute inset-0 w-full h-full object-contain select-none pointer-events-none"
                         />
                         {isDragging && (
                             <>

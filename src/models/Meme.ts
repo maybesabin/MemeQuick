@@ -5,7 +5,7 @@ const MemeSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    imageUrl: {
+    url: {
         type: String,
         required: true
     }

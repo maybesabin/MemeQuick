@@ -43,6 +43,6 @@ export type setText = {
 }
 
 export type Meme = {
-    imageUrl: string;
+    url: string;
     name: string;
 }

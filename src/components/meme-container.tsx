@@ -7,17 +7,39 @@ import { useRouter } from "next/navigation";
 import { flushSync } from "react-dom";
 import { Meme } from "@/types/text";
 import { Button } from "./ui/button";
-import { X } from "lucide-react";
+import { X, ChevronLeft, ChevronRight } from "lucide-react";
+import { useState, useMemo, useEffect } from "react";
 
 const MemeContainer = () => {
     const { setSelectedMeme, filteredMemes, isLoading, searchQuery, setSearchQuery } = useMemeContext();
     const router = useRouter();
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 25;
+
+    // Calculate paginated results
+    const paginatedMemes = useMemo(() => {
+        if (!filteredMemes) return [];
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        return filteredMemes.slice(startIndex, endIndex);
+    }, [filteredMemes, currentPage]);
+
+    // Calculate total pages
+    const totalPages = useMemo(() => {
+        if (!filteredMemes) return 0;
+        return Math.ceil(filteredMemes.length / itemsPerPage);
+    }, [filteredMemes]);
+
+    // Reset to first page when search changes
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchQuery]);
 
     const handleMemeClick = (meme: Meme) => {
         flushSync(() => {
             setSelectedMeme({
                 name: meme.name,
-                imageUrl: meme.imageUrl
+                url: meme.url
             });
         });
         router.push('/create/custom');
@@ -25,6 +47,14 @@ const MemeContainer = () => {
 
     const handleClearSearch = () => {
         setSearchQuery("");
+    };
+
+    const handlePreviousPage = () => {
+        setCurrentPage(prev => Math.max(prev - 1, 1));
+    };
+
+    const handleNextPage = () => {
+        setCurrentPage(prev => Math.min(prev + 1, totalPages));
     };
 
     // Loading skeleton component
@@ -48,7 +78,7 @@ const MemeContainer = () => {
                     className="h-full w-full object-cover brightness-90 hover:brightness-100 transition-all duration-200"
                     width={600}
                     height={600}
-                    src={item.imageUrl}
+                    src={item.url}
                     alt={`${item.name} meme`}
                 />
             </div>
@@ -97,6 +127,49 @@ const MemeContainer = () => {
         </div>
     );
 
+    // Pagination component
+    const Pagination = () => {
+        if (totalPages <= 1) return null;
+
+        return (
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                className="col-span-full flex items-center justify-center gap-4 mt-8"
+            >
+                <Button
+                    onClick={handlePreviousPage}
+                    disabled={currentPage === 1}
+                    variant="secondary"
+                    size="sm"
+                    className="flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                    <ChevronLeft className="w-4 h-4" />
+                    Previous
+                </Button>
+
+                <div className="flex items-center gap-2 text-sm text-gray-300">
+                    <span>Page</span>
+                    <span className="font-medium text-purple-300">{currentPage}</span>
+                    <span>of</span>
+                    <span className="font-medium text-purple-300">{totalPages}</span>
+                </div>
+
+                <Button
+                    onClick={handleNextPage}
+                    disabled={currentPage === totalPages}
+                    variant="secondary"
+                    size="sm"
+                    className="flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                    Next
+                    <ChevronRight className="w-4 h-4" />
+                </Button>
+            </motion.div>
+        );
+    };
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -116,11 +189,21 @@ const MemeContainer = () => {
                 ) : searchQuery && filteredMemes?.length === 0 ? (
                     <NoResults />
                 ) : (
-                    filteredMemes?.map((item: Meme, idx: number) => (
+                    paginatedMemes?.map((item: Meme, idx: number) => (
                         <MemeItem key={`meme-${idx}`} item={item} />
                     ))
                 )}
             </div>
+
+            {/* Pagination */}
+            {!isLoading && filteredMemes && filteredMemes.length > 0 && (
+                <>
+                    <div className="col-span-full text-center text-sm text-gray-400 mt-4">
+                        Showing {paginatedMemes.length} of {filteredMemes.length} memes
+                    </div>
+                    <Pagination />
+                </>
+            )}
         </motion.div>
     )
 }
