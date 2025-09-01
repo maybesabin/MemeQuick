@@ -197,12 +197,7 @@ const MemeContainer = () => {
 
             {/* Pagination */}
             {!isLoading && filteredMemes && filteredMemes.length > 0 && (
-                <>
-                    <div className="col-span-full text-center text-sm text-gray-400 mt-4">
-                        Showing {paginatedMemes.length} of {filteredMemes.length} memes
-                    </div>
-                    <Pagination />
-                </>
+                <Pagination />
             )}
         </motion.div>
     )
